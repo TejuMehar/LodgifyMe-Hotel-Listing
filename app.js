@@ -46,23 +46,24 @@ main().then(() => {
 app.get('/', (req, res) => {
     res.send('Welcome to the API');
 });
-app.get('/testListings', async(req,res)=>{
- let listings =  new Listing({
-    title: "Testeeeee Listing",
-    description: "This is a test listing",
-    image: "https://via.placeholder.com/150",
-    location: "Test Location",
-    country: "Test Country"
-  });
-  await listings.save().then(() => {
-    res.status(200).json({ message: "Listing created successfully", listing: listings });
-    console.log("Listing created successfully");
-  }).catch(err => {
-    res.status(500).json({ message: "Error creating listing", error: err });
-  });
+
+// app.get('/testListings', async(req,res)=>{
+//  let listings =  new Listing({
+//     title: "Testeeeee Listing",
+//     description: "This is a test listing",
+//     image: "https://via.placeholder.com/150",
+//     location: "Test Location",
+//     country: "Test Country"
+//   });
+//   await listings.save().then(() => {
+//     res.status(200).json({ message: "Listing created successfully", listing: listings });
+//     console.log("Listing created successfully");
+//   }).catch(err => {
+//     res.status(500).json({ message: "Error creating listing", error: err });
+//   });
 
 
- });
+//  });
 
 
  //Index Route

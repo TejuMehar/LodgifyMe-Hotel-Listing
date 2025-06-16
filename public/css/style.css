@@ -1,0 +1,25 @@
+
+body {
+    font-family: 'Montserrat', 'Arial', sans-serif;
+    background-color: #fff7f6;
+    margin: 0;
+    padding: 20px;
+    color: #222222;
+}
+
+.navbar {
+    height: 5rem;
+    background-color: white;
+}
+.fa-compass{
+    color: #fe424f;
+    font-size: 2rem;
+}
+
+.nav-link {
+    color: #222222 !important;
+}
+
+.LodgifyMe {
+    color: #fe424f;
+}
