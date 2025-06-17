@@ -84,6 +84,9 @@ app.get("/listings/new",async (req,res)=>{
 app.get("/listings/:id", async(req,res)=>{
   let {id} = req.params;
   let listing =  await Listing.findById(id);
+   if (!listing) {
+    return res.status(404).send('Listing not found');
+  }
   res.render("listings/show.ejs",{ listing });
 })
 
