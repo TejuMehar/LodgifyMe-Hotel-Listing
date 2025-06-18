@@ -8,6 +8,7 @@ const cors = require('cors');
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
+const wrapAsync = require('./utils/wrapAsync'); // Assuming you have a utility function for async error handling
 
 
 
@@ -92,17 +93,11 @@ app.get("/listings/:id", async(req,res)=>{
 
 
 //Create Route
-app.post("/listings", async(req,res)=>{
-     try{
+app.post("/listings", wrapAsync(async(req,res)=>{
      let newlisting = new Listing (req.body.listing);
      await newlisting.save();
     res.redirect("/listings");
-     }catch(err){
-      // let { title,description,price,location,image,country} = req.body;
-      console.error("Error creating listing:", err);
-      res.status(500).send("Error creating listing");
-     }
-});
+}));
 
 // Edit Route
 app.get("/listings/:id/edit", async(req,res)=>{
@@ -126,6 +121,10 @@ app.delete("/listings/:id/delete",async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
   res.redirect("/listings");
+})
+
+app.use((err,req,res,next)=>{
+    res.status(500).send('Something went Wrong!'); 
 })
 
 const PORT = process.env.PORT || 3000;
