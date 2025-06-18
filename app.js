@@ -10,7 +10,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/wrapAsync.js'); // Assuming you have a utility function for async error handling
 const ExpressError = require('./utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
-
+const { listingSchema } = require('./schema.js'); // Assuming you have a schema defined in schema.js
 
 const PORT = process.env.PORT || 3000;
 
@@ -74,6 +74,17 @@ app.get('/listings', async (req, res) => {
 });
 
 
+const validateListing = (req, res, next) => {
+  const { error } = listingSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details[0].message;
+    // If the error message contains 'availableTo', replace it with 'Available To'  
+    // If validation fails, render the error page with the validation message
+   throw new ExpressError(400, error.details[0].message);
+  }
+  next();
+}
+
 //new Route
 app.get("/listings/new",async (req,res)=>{
     
@@ -96,10 +107,7 @@ app.get('/listings/:id', wrapAsync(async (req, res, next) => {
 }));
 
 //Create Route
-app.post("/listings", wrapAsync(async(req,res)=>{
-     if(!req.body.listing){
-        throw new ExpressError(400, 'Invalid listing data');
-     }
+app.post("/listings",validateListing ,wrapAsync(async(req,res)=>{
      let newlisting = new Listing (req.body.listing);
      await newlisting.save();
     res.redirect("/listings");
@@ -114,7 +122,7 @@ app.get("/listings/:id/edit", async(req,res)=>{
 
 //Update Route
 
-app.put("/listings/:id",async(req,res)=>{
+app.put("/listings/:id",validateListing, async(req,res)=>{
   let { id } = req.params;
    await Listing.findByIdAndUpdate(id,{...req.body.listing});
   // Redirect to the show page for this listing
