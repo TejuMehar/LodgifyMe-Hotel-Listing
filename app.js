@@ -8,11 +8,11 @@ const cors = require('cors');
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const wrapAsync = require('./utils/wrapAsync'); // Assuming you have a utility function for async error handling
+const wrapAsync = require('./utils/wrapAsync.js'); // Assuming you have a utility function for async error handling
+const ExpressError = require('./utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
 
 
-
-
+const PORT = process.env.PORT || 3000;
 
 // Set EJS as the template/view engine for rendering dynamic HTML
 app.set('view engine', 'ejs');
@@ -82,18 +82,24 @@ app.get("/listings/new",async (req,res)=>{
 
 
 //Show Route
-app.get("/listings/:id", async(req,res)=>{
-  let {id} = req.params;
-  let listing =  await Listing.findById(id);
-   if (!listing) {
-    return res.status(404).send('Listing not found');
+app.get('/listings/:id', wrapAsync(async (req, res, next) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    // If not a valid ObjectId, show 404 page
+    return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
   }
-  res.render("listings/show.ejs",{ listing });
-})
-
+  const listing = await Listing.findById(id);
+  if (!listing) {
+    return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
+  }
+  res.render('listings/show.ejs', { listing });
+}));
 
 //Create Route
 app.post("/listings", wrapAsync(async(req,res)=>{
+     if(!req.body.listing){
+        throw new ExpressError(400, 'Invalid listing data');
+     }
      let newlisting = new Listing (req.body.listing);
      await newlisting.save();
     res.redirect("/listings");
@@ -121,13 +127,28 @@ app.delete("/listings/:id/delete",async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
   res.redirect("/listings");
-})
+});
 
-app.use((err,req,res,next)=>{
-    res.status(500).send('Something went Wrong!'); 
-})
+// app.all('*', (req, res, next) => {
+//   next(err);
+// });
 
-const PORT = process.env.PORT || 3000;
+// app.all('*', (req, res, next) => {
+//   next(new ExpressError(404, 'Page Not Found'));
+// });
+
+app.use((req, res, next) => {
+  // If no route matched, this middleware runs
+  res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
+});
+
+// Error handler (for all other errors)
+app.use((err, req, res, next) => {
+  const { status = 500, message = 'Something went wrong' } = err;
+  res.status(status).render('listings/Error.ejs', { status, message });
+});
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
