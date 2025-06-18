@@ -11,6 +11,10 @@ const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/wrapAsync.js'); // Assuming you have a utility function for async error handling
 const ExpressError = require('./utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
 const { listingSchema } = require('./schema.js'); // Assuming you have a schema defined in schema.js
+const  Review = require('./models/review.js'); // Assuming you have a Review model defined in models/review.js
+
+
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -135,6 +139,18 @@ app.delete("/listings/:id/delete",async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
   res.redirect("/listings");
+});
+
+
+//Reviews Routes
+//post new review
+app.post('/listings/:id/reviews', async (req, res) => {
+   let { id } = req.params;
+   let listing = await Listing.findById(id);
+    let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    res.redirect(`/listings/${id}`);
 });
 
 // app.all('*', (req, res, next) => {
