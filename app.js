@@ -93,10 +93,15 @@ app.get("/listings/:id", async(req,res)=>{
 
 //Create Route
 app.post("/listings", async(req,res)=>{
-      // let { title,description,price,location,image,country} = req.body;
-    let newlisting = new Listing (req.body.listing);
+     try{
+     let newlisting = new Listing (req.body.listing);
      await newlisting.save();
     res.redirect("/listings");
+     }catch(err){
+      // let { title,description,price,location,image,country} = req.body;
+      console.error("Error creating listing:", err);
+      res.status(500).send("Error creating listing");
+     }
 });
 
 // Edit Route
