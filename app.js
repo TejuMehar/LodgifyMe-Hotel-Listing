@@ -52,23 +52,6 @@ app.get('/', (req, res) => {
     res.send('Welcome to the API');
 });
 
-// app.get('/testListings', async(req,res)=>{
-//  let listings =  new Listing({
-//     title: "Testeeeee Listing",
-//     description: "This is a test listing",
-//     image: "https://via.placeholder.com/150",
-//     location: "Test Location",
-//     country: "Test Country"
-//   });
-//   await listings.save().then(() => {
-//     res.status(200).json({ message: "Listing created successfully", listing: listings });
-//     console.log("Listing created successfully");
-//   }).catch(err => {
-//     res.status(500).json({ message: "Error creating listing", error: err });
-//   });
-
-
-//  });
 
 const validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body);
@@ -98,16 +81,11 @@ app.get('/listings', async (req, res) => {
     res.render('listings/index.ejs', { allListings });
 });
 
-
-
-
 //new Route
 app.get("/listings/new",async (req,res)=>{
     
      res.render("listings/new.ejs");
-})
-
-
+});
 //Show Route
 app.get('/listings/:id', wrapAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -135,9 +113,7 @@ app.get("/listings/:id/edit", async(req,res)=>{
   let listing  = await Listing.findById(id);
    res.render("listings/edit.ejs", { listing});
 });
-
 //Update Route
-
 app.put("/listings/:id", validateListing, async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
@@ -155,7 +131,6 @@ app.put("/listings/:id", validateListing, async (req, res) => {
   res.redirect(`/listings/${id}`);
 });
 //Delete Route
-
 app.delete("/listings/:id/delete",async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
