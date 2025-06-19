@@ -145,11 +145,13 @@ app.delete("/listings/:id/delete",async(req,res)=>{
 //Reviews Routes
 //post new review
 app.post('/listings/:id/reviews', async (req, res) => {
-   let { id } = req.params;
+
+    const { id } = req.params;
    let listing = await Listing.findById(id);
     let newReview = new Review(req.body.review);
     listing.reviews.push(newReview);
     await newReview.save();
+    await listing.save();
     res.redirect(`/listings/${id}`);
 });
 
