@@ -1,9 +1,9 @@
 <%- layout('/layouts/boilerplate') %>
-<body>
-    <h1>All Listings</h1>
-    <div class="row">
+<body class="mt-5">
+     
+    <div class="row mt-5">
       <% for(let listing of allListings) { %>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 d-flex">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4  d-flex">
           <a class="cardClick" href="/listings/<%= listing.id%>">
           <div class="card w-100 h-100 d-flex flex-column">
              <div class="card-img-overlay"></div>

@@ -16,7 +16,7 @@
             </div>
             <div class="mb-3">
               <label for="image" class="form-label fw-semibold">Image URL:</label>
-              <input type="url" id="image" name="listing[image][url]" class="form-control" value="<%= listing.image.url %>">
+             <input type="url" id="image" name="listing[image]" class="form-control" value="<%= listing.image.url ? listing.image.url : listing.image %>">
             </div>
             <div class="row">
               <div class="mb-3 col-4">

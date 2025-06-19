@@ -1,40 +1,44 @@
-<% layout('/layouts/boilerplate') %>
-<body class="bg-light">
+<%- layout('/layouts/boilerplate') %>
+<body class="bg-light mt-5">
   <h1 class="text-center my-4">Create New Listings</h1>
   <div class="row justify-content-center">
     <div class="col-md-6">
       <div class="card shadow-lg rounded-4">
         <div class="card-body p-4">
-          <form action="/listings" method="POST" novalidate class="needs-validation" >
+          <form action="/listings" method="POST" novalidate class="needs-validation">
             <div class="mb-3">
-              <label for="title" class="form-label fw-semibold ">Title:</label>
+              <label for="title" class="form-label fw-semibold">Title:</label>
               <input type="text" id="title" name="listing[title]" class="form-control" required>
               <div class="valid-feedback">
-              Title looks good!
+                Title looks good!
+              </div>
             </div>
-            </div>
-            
             <div class="mb-3">
-              <label for="description" class="form-label fw-semibold ">Description:</label>
+              <label for="description" class="form-label fw-semibold">Description:</label>
               <textarea id="description" name="listing[description]" class="form-control" required></textarea>
+              <div class="invalid-feedback">
+                Please enter a description.
+              </div>
             </div>
             <div class="mb-3">
               <label for="image" class="form-label fw-semibold">Image URL:</label>
-              <input type="url" id="image" name="listing[image][url]" class="form-control">
+              <input type="url" id="image" name="listing[image]" class="form-control">
+        
             </div>
             <div class="row">
               <div class="mb-3 col-4">
-                <label for="price" class="form-label fw-semibold ">Price:</label>
-                <input  id="price" name="listing[price]" class="form-control" required>
-                   <div class="invalid-feedback">
+                <label for="price" class="form-label fw-semibold">Price:</label>
+                <input type="number" id="price" name="listing[price]" class="form-control" required>
+                <div class="invalid-feedback">
                   Please enter a valid price.
-                  </div>
+                </div>
               </div>
               <div class="mb-3 col-8">
-                <label for="country" class="form-label fw-semibold ">Country:</label>
+                <label for="country" class="form-label fw-semibold">Country:</label>
                 <input type="text" id="country" name="listing[country]" class="form-control" required>
                 <div class="invalid-feedback">
-                  Please enter country Name.
+                  Please enter country name.
+                </div>
               </div>
             </div>
             <div class="mb-3">
@@ -42,6 +46,7 @@
               <input type="text" id="location" name="listing[location]" class="form-control" required>
               <div class="invalid-feedback">
                 Please enter location.
+              </div>
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-danger w-100 fw-bold">Create New Listing</button>
@@ -50,5 +55,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>     
 </body>

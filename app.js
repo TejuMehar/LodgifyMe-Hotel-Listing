@@ -10,7 +10,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/wrapAsync.js'); // Assuming you have a utility function for async error handling
 const ExpressError = require('./utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
-const { listingSchema } = require('./schema.js'); // Assuming you have a schema defined in schema.js
+const { listingSchema, reviewSchema } = require('./schema.js'); // Assuming you have a schema defined in schema.js
 const  Review = require('./models/review.js'); // Assuming you have a Review model defined in models/review.js
 
 
@@ -70,14 +70,6 @@ app.get('/', (req, res) => {
 
 //  });
 
-
- //Index Route
-app.get('/listings', async (req, res) => {
-    let allListings =  await Listing.find({});
-    res.render('listings/index.ejs', { allListings });
-});
-
-
 const validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body);
   if (error) {
@@ -88,6 +80,26 @@ const validateListing = (req, res, next) => {
   }
   next();
 }
+
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
+  if (error) {
+    // If validation fails, render the error page with the validation message
+    throw new ExpressError(400, error.details[0].message);
+  }
+  next(); 
+}
+
+
+ //Index Route
+app.get('/listings', async (req, res) => {
+    let allListings =  await Listing.find({});
+    res.render('listings/index.ejs', { allListings });
+});
+
+
+
 
 //new Route
 app.get("/listings/new",async (req,res)=>{
@@ -103,7 +115,7 @@ app.get('/listings/:id', wrapAsync(async (req, res, next) => {
     // If not a valid ObjectId, show 404 page
     return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
   }
-  const listing = await Listing.findById(id);
+  const listing = await Listing.findById(id).populate('reviews');
   if (!listing) {
     return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
   }
@@ -111,10 +123,10 @@ app.get('/listings/:id', wrapAsync(async (req, res, next) => {
 }));
 
 //Create Route
-app.post("/listings",validateListing ,wrapAsync(async(req,res)=>{
-     let newlisting = new Listing (req.body.listing);
-     await newlisting.save();
-    res.redirect("/listings");
+app.post("/listings", validateListing, wrapAsync(async (req, res) => {
+  let newlisting = new Listing(req.body.listing);
+  await newlisting.save();
+  res.redirect("/listings");
 }));
 
 // Edit Route
@@ -126,13 +138,22 @@ app.get("/listings/:id/edit", async(req,res)=>{
 
 //Update Route
 
-app.put("/listings/:id",validateListing, async(req,res)=>{
-  let { id } = req.params;
-   await Listing.findByIdAndUpdate(id,{...req.body.listing});
-  // Redirect to the show page for this listing
-   res.redirect(`/listings/${id}`);
-});
+app.put("/listings/:id", validateListing, async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
 
+  // If image field is empty, keep the old image (handle both string and object)
+  if (!req.body.listing.image || req.body.listing.image.trim() === "") {
+    if (typeof listing.image === "object" && listing.image.url) {
+      req.body.listing.image = listing.image.url;
+    } else {
+      req.body.listing.image = listing.image;
+    }
+  }
+
+  await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+  res.redirect(`/listings/${id}`);
+});
 //Delete Route
 
 app.delete("/listings/:id/delete",async(req,res)=>{
@@ -154,6 +175,14 @@ app.post('/listings/:id/reviews', async (req, res) => {
     await listing.save();
     res.redirect(`/listings/${id}`);
 });
+
+// Delete review Route 
+app.delete('/listings/:id/reviews/:reviewId', wrapAsync(async (req, res) => {
+  const { id, reviewId } = req.params;
+  await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+  await Review.findByIdAndDelete(reviewId);
+  res.redirect(`/listings/${id}`);
+}));
 
 // app.all('*', (req, res, next) => {
 //   next(err);
