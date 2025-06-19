@@ -13,3 +13,4 @@ module.exports.listingSchema = joi.object({
     availableTo: joi.date().iso().greater(joi.ref('availableFrom')).required()
     }).required()
 });
+
