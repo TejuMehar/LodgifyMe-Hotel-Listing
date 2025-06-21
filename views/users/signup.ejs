@@ -1,0 +1,89 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row justify-content-center align-items-center mt-5" style="min-height: 80vh;">
+  <div class="col-md-6 col-lg-5 mt-5">
+    <div class="card shadow-lg border-0 rounded-4 animate__animated animate__fadeIn">
+      <div class="card-body p-5">
+        <h2 class="mb-4 text-center fw-bold text-gradient">
+          <i class="bi bi-person-plus-fill me-2 text-success"></i>Sign Up on LodgifyMe
+        </h2>
+        
+        <form action="/signup" method="post" class="needs-validation" novalidate>
+          <!-- Username -->
+          <div class="mb-3">
+            <label for="username" class="form-label fw-semibold">Username:</label>
+            <input type="text" id="username" name="username" class="form-control rounded-3 shadow-sm" required>
+            <div class="valid-feedback">Looks good!</div>
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">Email:</label>
+            <input type="email" id="email" name="email" class="form-control rounded-3 shadow-sm" required>
+            <div class="valid-feedback">Looks good!</div>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-4 position-relative">
+            <label for="password" class="form-label fw-semibold">Password:</label>
+            <input type="password" id="password" name="password"
+                   class="form-control rounded-3 shadow-sm pe-5" required>
+                   
+            <button type="button"
+  class="btn btn-sm position-absolute top-50 end-0  me-2"
+  onclick="togglePassword()" tabindex="-1"
+  style="z-index: 2; text-decoration: none;">
+  <span id="toggleIcon"><i class="bi bi-eye fs-5 text-secondary"></i></span>
+</button>
+
+            <div class="valid-feedback">Looks good!</div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-grid">
+            <button class="btn btn-gradient fw-bold py-2 rounded-pill" type="submit">
+              <i class="bi bi-person-check-fill me-1"></i>Sign Up
+            </button>
+          </div>
+        </form>
+
+        <!-- Login Redirect -->
+        <div class="text-center mt-3">
+          <small>Already have an account? <a href="/login" class="text-gradient fw-semibold">Login</a></small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Styles -->
+<style>
+  .text-gradient {
+    background: linear-gradient(90deg, #ff8a00 0%, #e52e71 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .btn-gradient {
+    background: linear-gradient(90deg, #ff8a00 0%, #e52e71 100%);
+    color: #fff;
+    border: none;
+    transition: box-shadow 0.2s;
+  }
+  .btn-gradient:hover {
+    box-shadow: 0 4px 20px rgba(229,46,113,0.2), 0 2px 4px rgba(255,138,0,0.15);
+    color: #fff;
+  }
+</style>
+
+<!-- Password Toggle Script -->
+<script>
+  function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    const toggleIcon = document.getElementById("toggleIcon").firstElementChild;
+    const isText = passwordInput.type === "text";
+
+    passwordInput.type = isText ? "password" : "text";
+    toggleIcon.className = isText ? "bi bi-eye-slash fs-5 text-secondary" : "bi bi-eye fs-5 text-secondary";
+  }
+</script>
+

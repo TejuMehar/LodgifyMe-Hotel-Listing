@@ -15,4 +15,16 @@
       form.classList.add('was-validated')
     }, false)
   })
-})()
+})();
+
+  // function togglePassword() {
+  //   const pwd = document.getElementById('password');
+  //   const icon = document.getElementById('toggleIcon');
+  //   if (pwd.type === 'password') {
+  //     pwd.type = 'text';
+  //     icon.innerHTML = '<i class="bi bi-eye-slash fs-5"></i>';
+  //   } else {
+  //     pwd.type = 'password';
+  //     icon.innerHTML = '<i class="bi bi-eye fs-5"></i>';
+  //   }
+  // }

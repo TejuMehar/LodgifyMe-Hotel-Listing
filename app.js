@@ -12,11 +12,14 @@ const wrapAsync = require('./utils/wrapAsync.js'); // Assuming you have a utilit
 const ExpressError = require('./utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
 const { listingSchema, reviewSchema } = require('./schema.js'); // Assuming you have a schema defined in schema.js
 const  Review = require('./models/review.js'); // Assuming you have a Review model defined in models/review.js
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter =require("./routes/user.js");
 const session = require("express-session");
 const flash = require("connect-flash");
-
+const passport = require("passport");
+const LocalStrategy = require('passport-local');
+const User = require("./models/user.js");
 
 const PORT = process.env.PORT || 3000;
 
@@ -68,6 +71,14 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 
 app.use((req,res,next)=>{
   res.locals.success = req.flash("success");
@@ -75,8 +86,20 @@ app.use((req,res,next)=>{
   next();
 })
 
-app.use("/listings",listings);
-app.use("/listings/:id/reviews",reviews);
+// app.get('/demoUser', async(req,res)=>{
+//   let fakeUser = new User ({
+//     email: "tejasmehar7@gmail",
+//     username: "delta-student"
+//   });
+
+//    let registerUser =  await User.register(fakeUser, "HellowWorld");
+//    res.send(registerUser);
+
+// })
+
+app.use("/listings",listingRouter);
+app.use("/listings/:id/reviews",reviewRouter);
+app.use("/",userRouter);
 
 
 app.use((req, res, next) => {
