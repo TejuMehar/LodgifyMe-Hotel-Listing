@@ -20,6 +20,8 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require('passport-local');
 const User = require("./models/user.js");
+require("dotenv").config();
+
 
 const PORT = process.env.PORT || 3000;
 

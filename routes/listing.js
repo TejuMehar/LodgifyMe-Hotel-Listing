@@ -5,7 +5,7 @@ const wrapAsync = require('../utils/wrapAsync.js'); // Assuming you have a utili
 const ExpressError = require('../utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
 const { listingSchema, reviewSchema } = require('../schema.js'); // Assuming you have a schema defined in schema.js
 const Listing = require('../models/listing'); // Assuming you have a Listing model defined in models/listing.js
-
+const { sendListingConfirmationEmail } = require("../utils/mailer.js");
 
 
 const validateListing = (req, res, next) => {
@@ -23,14 +23,19 @@ const validateListing = (req, res, next) => {
  //Index Route
 router.get('/', async (req, res) => {
     let allListings =  await Listing.find({});
-    res.render('listings/index.ejs', { allListings });
+     return res.render('listings/index.ejs', { allListings });
 });
 
 //new Route
-router.get("/new",async (req,res)=>{
-    
-     res.render("listings/new.ejs");
+
+router.get("/new", (req, res) => {
+  if (!req.isAuthenticated()) {
+    req.flash("error", "You must be logged in to create a listing");
+    return res.redirect("/login"); // ✅ return stops execution here
+  }
+  res.render("listings/new.ejs"); // ✅ only runs if authenticated
 });
+
 //Show Route
 router.get('/:id', wrapAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -50,6 +55,9 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
 router.post("/", validateListing, wrapAsync(async (req, res) => {
   let newlisting = new Listing(req.body.listing);
   await newlisting.save();
+
+  // 👇 send listing confirmation email
+ await sendListingConfirmationEmail(req.user.email, req.user.username, newlisting.title);
   req.flash("success","New Listing Created!");
   res.redirect("/listings");
 }));
