@@ -6,7 +6,7 @@ const { listingSchema, reviewSchema } = require('../schema.js'); // Assuming you
 const  Review = require('../models/review.js'); // Assuming you have a Review model defined in models/review.js
 const Listing = require('../models/listing'); // Assuming you have a Listing model defined in models/listing.js
 const mongoose = require('mongoose');
-
+const { sendReviewEmail } = require("../utils/mailer");
 //For Server Side Validation using joi
 const validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
@@ -24,6 +24,8 @@ router.post('/', async (req, res) => {
    let listing = await Listing.findById(id);
     let newReview = new Review(req.body.review);
     listing.reviews.push(newReview);
+    // Send Review Email
+
      req.flash("success","Review is Successfully Added!");
     await newReview.save();
     await listing.save();

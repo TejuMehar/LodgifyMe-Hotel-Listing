@@ -91,5 +91,31 @@ const sendListingConfirmationEmail = async (to, username, listingTitle) => {
   });
 };
 
-module.exports = { sendWelcomeEmail, sendListingConfirmationEmail };
+const sendReviewEmail = async (to, username, listingTitle, reviewContent) => {
+  await transporter.sendMail({
+    from: `"LodgifyMe Reviews" <${process.env.MAIL_USER}>`,
+    to,
+    subject: `Thanks for reviewing "${listingTitle}"!`,
+    html: `
+      <div style="max-width:600px;margin:auto;padding:30px;font-family:'Segoe UI',sans-serif;background:#fff;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color:#ff6f00;">Hi ${username},</h2>
+        <p>Thanks for sharing your thoughts on <strong>${listingTitle}</strong> 📝</p>
+        <blockquote style="border-left: 4px solid #ff6f00; margin: 20px 0; padding-left: 15px; color: #555;">
+          "${reviewContent}"
+        </blockquote>
+        <p>Your feedback helps others and supports great hosts.</p>
+        <div style="text-align:center;margin:30px 0;">
+          <a href="https://lodgifyme.com/listings" style="background:linear-gradient(90deg,#ff8a00,#e52e71);color:white;padding:12px 24px;border-radius:30px;text-decoration:none;font-weight:bold;">Explore More Stays</a>
+        </div>
+        <hr style="margin-top:40px;">
+        <footer style="font-size:12px;color:#aaa;text-align:center;">
+          This is an automated email. Please do not reply.<br/>
+          &copy; ${new Date().getFullYear()} LodgifyMe
+        </footer>
+      </div>
+    `,
+  });
+};
+
+module.exports = { sendWelcomeEmail, sendListingConfirmationEmail,sendReviewEmail };
 

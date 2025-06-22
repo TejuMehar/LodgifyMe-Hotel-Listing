@@ -6,7 +6,7 @@ const ExpressError = require('../utils/ExpressError.js'); // Assuming you have a
 const { listingSchema, reviewSchema } = require('../schema.js'); // Assuming you have a schema defined in schema.js
 const Listing = require('../models/listing'); // Assuming you have a Listing model defined in models/listing.js
 const { sendListingConfirmationEmail } = require("../utils/mailer.js");
-
+const { isLogedIn }= require('../middleware.js');
 
 const validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body);
@@ -28,11 +28,8 @@ router.get('/', async (req, res) => {
 
 //new Route
 
-router.get("/new", (req, res) => {
-  if (!req.isAuthenticated()) {
-    req.flash("error", "You must be logged in to create a listing");
-    return res.redirect("/login"); // ✅ return stops execution here
-  }
+router.get("/new",isLogedIn ,(req, res) => {
+ 
   res.render("listings/new.ejs"); // ✅ only runs if authenticated
 });
 
@@ -63,7 +60,7 @@ router.post("/", validateListing, wrapAsync(async (req, res) => {
 }));
 
 // Edit Route
-router.get("/:id/edit", async(req,res)=>{
+router.get("/:id/edit",isLogedIn ,async(req,res)=>{
   let {id} = req.params;
   let listing  = await Listing.findById(id);
    res.render("listings/edit.ejs", { listing});
@@ -71,7 +68,7 @@ router.get("/:id/edit", async(req,res)=>{
 
 
 //Update Route
-router.put("/:id", validateListing, async (req, res) => {
+router.put("/:id",isLogedIn ,validateListing, async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
 
@@ -90,7 +87,7 @@ router.put("/:id", validateListing, async (req, res) => {
 });
 //Delete Route
 
-router.delete("/:id/delete",async(req,res)=>{
+router.delete("/:id/delete",isLogedIn,async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
    req.flash("success","Listing is Deleted!");
