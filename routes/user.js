@@ -41,7 +41,8 @@ router.post("/login",saveRedirectUrl ,
   failureFlash: true
 }), async(req, res) => {
   req.flash("success", "Welcome to LodgifyMe!");
-  res.redirect(req.session.redirectUrl);
+  // res.redirect(req.session.redirectUrl);
+  res.redirect("/listings");
 });
 
 router.get("/logout",(req,res)=>{

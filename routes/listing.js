@@ -29,8 +29,14 @@ router.get('/', async (req, res) => {
 //new Route
 
 router.get("/new",isLogedIn ,(req, res) => {
- 
-  res.render("listings/new.ejs"); // ✅ only runs if authenticated
+ if(!req.isAuthenticated()) {
+    // If user is not authenticated, redirect to login page
+  req.flash("error","you must be login") // ✅ only runs if authenticated
+  res.redirect("/listings");
+  } else {
+    // If user is authenticated, render the new listing form
+    res.render("listings/new.ejs");
+  }
 });
 
 //Show Route
@@ -86,11 +92,12 @@ router.put("/:id",isLogedIn ,validateListing, async (req, res) => {
   res.redirect(`/${id}`);
 });
 //Delete Route
-
-router.delete("/:id/delete",isLogedIn,async(req,res)=>{
+router.delete("/:id", isLogedIn, async (req, res) => {
   let { id } = req.params;
-  await Listing.findByIdAndDelete(id);
-   req.flash("success","Listing is Deleted!");
+  console.log("Delete request for ID:", id); // Add this line
+  const deleted = await Listing.findByIdAndDelete(id);
+  console.log("Deleted:", deleted); // Add this line
+  req.flash("success", "Listing is Deleted!");
   res.redirect("/listings");
 });
 

@@ -1,0 +1,58 @@
+<% layout('layouts/boilerplate') %>
+
+<section class="py-5 bg-light" style="margin-top: 10px; col-md-8" >
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4 text-primary">Get in Touch</h2>
+    <p class="text-center text-muted mb-5">Have a question or feedback? Send me a message and I’ll get back to you!</p>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+
+        <!-- Contact Form -->
+        <form id="contactForm">
+          <div class="mb-3">
+            <label for="name" class="form-label fw-semibold">Full Name</label>
+            <input type="text" class="form-control" id="name" required placeholder="Enter your full name">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">Email address</label>
+            <input type="email" class="form-control" id="email" required placeholder="yourname@example.com">
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label fw-semibold">Message</label>
+            <textarea class="form-control" id="message" rows="4" required placeholder="Type your message here..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100">Send via WhatsApp</button>
+        </form>
+
+        <!-- Optional: Direct WhatsApp Button -->
+        <div class="text-center mt-4">
+          <a href="https://wa.me/91YOURNUMBER" target="_blank" class="btn btn-outline-primary">
+            <i class="bi bi-whatsapp me-2"></i>Chat with me on WhatsApp
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const contactForm = document.getElementById("contactForm");
+  contactForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    const whatsappMessage = `Hello Tejas, I am ${name}. My email is ${email}. Message: ${message}`;
+
+    // Replace with your actual WhatsApp number (no + sign)
+    const phoneNumber = "917447746247";
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+    window.open(url, "_blank");
+  });
+</script>

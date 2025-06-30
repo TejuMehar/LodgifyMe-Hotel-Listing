@@ -4,21 +4,34 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse bg-body-light" id="navbarNavAltMarkup">
-      <div class="navbar-nav me-auto bg-body-light p-2">
-        <a class="nav-link" href="/">Home</a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav me-auto p-2">
+        <a class="nav-link" href="/listings">Home</a>
         <a class="nav-link" href="/listings">All Listings</a>
         <a class="nav-link" href="/listings/new">Add New Listing</a>
       </div>
-       <div class="navbar-nav ms-auto">
+      <div class="navbar-nav ms-auto p-2">
         <% if(!currUser) { %>
-        <a class="nav-link" href="/signup">SignUp</a>
-        <a class="nav-link" href="/login">Login</a>
+          <a class="nav-link" href="/signup">SignUp</a>
+          <a class="nav-link" href="/login">Login</a>
         <% } %>
-         <% if(currUser) { %>
-        <a class="nav-link" href="/logout">LogOut</a>
+        <% if(currUser) { %>
+          <a class="nav-link" href="/logout">LogOut</a>
         <% } %>
       </div>
     </div>
   </div>
 </nav>
+<style>
+  /* Custom background for mobile navbar dropdown */
+  @media (max-width: 767.98px) {
+    .navbar-collapse {
+      background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+      /* border-radius: 0 0 1rem 1rem; */
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    }
+    .navbar-nav {
+      background: transparent !important;
+    }
+  }
+</style>
