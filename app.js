@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
+const connectDB = require('./config/database.js'); // Import the database connection function
 const Listing = require('./models/listing'); // Assuming you have a Listing model defined in models/listing.js
 const mongoose = require('mongoose');
 const cors = require('cors');   
@@ -12,6 +13,7 @@ const wrapAsync = require('./utils/wrapAsync.js'); // Assuming you have a utilit
 const ExpressError = require('./utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
 const { listingSchema, reviewSchema } = require('./schema.js'); // Assuming you have a schema defined in schema.js
 const  Review = require('./models/review.js'); // Assuming you have a Review model defined in models/review.js
+const { connect } = require('http2');
 
 
 
@@ -35,18 +37,10 @@ app.use(methodOverride('_method'));
 
 app.engine('ejs',ejsMate);
 
-const MONGO_URL = 'mongodb://localhost:27017/lodgifyMe';
 
- 
-async function main() {
-   await mongoose.connect(MONGO_URL);
-}
 
-main().then(() => {
-    console.log('Connected to MongoDB');
-}).catch(err => {
-    console.error('MongoDB connection error:', err);
-});
+
+connectDB();
 
 app.get('/', (req, res) => {
     res.send('Welcome to the API');
