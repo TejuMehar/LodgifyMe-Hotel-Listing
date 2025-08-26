@@ -1,15 +1,61 @@
 <%- layout('/layouts/boilerplate') %>
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+<div class="container d-flex justify-content-center align-items-center py-5" style="min-height: 70vh; background: linear-gradient(135deg, #f8d7da, #fefefe);">
   <div class="col-md-8 col-lg-6">
-    <div class="alert alert-danger shadow-lg rounded-4 p-4 text-center" role="alert">
+    <div class="shadow-lg rounded-4 p-4 text-center"
+         style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); border: 1px solid rgba(220, 53, 69, 0.2); animation: fadeIn 0.7s ease-in-out;">
+      
+      <!-- Icon -->
       <div class="mb-3">
-        <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem; color: #dc3545;"></i>
+        <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem; color: #dc3545; animation: pulse 1.5s infinite;"></i>
       </div>
-      <h2 class="fw-bold mb-3">Oops!</h2>
-      <p class="fs-5 mb-4"><%= message %></p>
-      <a href="/listings" class="btn btn-primary btn-lg fw-semibold px-4 shadow-sm">
-        <i class="bi bi-house-door-fill me-2"></i>Go Home
+
+      <!-- Title -->
+      <h2 class="fw-bold mb-2 text-danger">Oops!</h2>
+
+      <!-- Message -->
+      <p class="fs-5 mb-3 text-muted"><%= message %></p>
+
+      <!-- Button -->
+      <a href="/listings" class="btn btn-danger btn-lg fw-semibold px-4 shadow-sm rounded-pill mb-4" 
+         style="transition: all 0.3s ease;">
+        <i class="bi bi-house-door-fill me-2"></i> Go Home
       </a>
+
+      <!-- Footer with Thanks + Social Media -->
+      <div class="mt-3">
+        <p class="mb-2 text-muted fw-semibold">We couldn’t find what you’re looking for.</p>
+               <span class="text-danger">LodgifyMe</span> ❤️
+        <div class="d-flex justify-content-center gap-3">
+          <a href="https://facebook.com" target="_blank" class="text-secondary fs-4 social-link"><i class="bi bi-facebook"></i></a>
+          <a href="https://twitter.com" target="_blank" class="text-secondary fs-4 social-link"><i class="bi bi-twitter"></i></a>
+          <a href="https://instagram.com" target="_blank" class="text-secondary fs-4 social-link"><i class="bi bi-instagram"></i></a>
+          <a href="https://linkedin.com" target="_blank" class="text-secondary fs-4 social-link"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Animations -->
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(220, 53, 69, 0.35);
+}
+.social-link {
+  transition: all 0.3s ease;
+}
+.social-link:hover {
+  color: #dc3545 !important;
+  transform: scale(1.2);
+}
+</style>

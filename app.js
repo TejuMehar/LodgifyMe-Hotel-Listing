@@ -101,17 +101,21 @@ app.post("/listings", validateListing, wrapAsync(async (req, res) => {
   res.redirect("/listings");
 }));
 
+
+
 // Edit Route
 app.get("/listings/:id/edit", async(req,res)=>{
   let {id} = req.params;
   let listing  = await Listing.findById(id);
    res.render("listings/edit.ejs", { listing});
 });
+
+
+
 //Update Route
 app.put("/listings/:id", validateListing, async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
-
   // If image field is empty, keep the old image (handle both string and object)
   if (!req.body.listing.image || req.body.listing.image.trim() === "") {
     if (typeof listing.image === "object" && listing.image.url) {
@@ -120,10 +124,11 @@ app.put("/listings/:id", validateListing, async (req, res) => {
       req.body.listing.image = listing.image;
     }
   }
-
   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
   res.redirect(`/listings/${id}`);
 });
+
+
 //Delete Route
 app.delete("/listings/:id/delete",async(req,res)=>{
   let { id } = req.params;
@@ -153,13 +158,6 @@ app.delete('/listings/:id/reviews/:reviewId', wrapAsync(async (req, res) => {
   res.redirect(`/listings/${id}`);
 }));
 
-// app.all('*', (req, res, next) => {
-//   next(err);
-// });
-
-// app.all('*', (req, res, next) => {
-//   next(new ExpressError(404, 'Page Not Found'));
-// });
 
 app.use((req, res, next) => {
   // If no route matched, this middleware runs
