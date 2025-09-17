@@ -1,2 +1,134 @@
 const express = require("express");
 const router = express.Router();
+const Listing = require('../models/listing.js'); 
+const wrapAsync = require('../utils/wrapAsync.js'); 
+const ExpressError = require('../utils/ExpressError.js'); 
+const { listingSchema, reviewSchema } = require('../schema.js'); 
+
+
+
+
+const validateListing = (req, res, next) => {
+  const { error } = listingSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details[0].message;
+    // If the error message contains 'availableTo', replace it with 'Available To'  
+    // If validation fails, render the error page with the validation message
+   throw new ExpressError(400, error.details[0].message);
+  }
+  next();
+}
+
+
+//Index Route
+router.get('/', async (req, res) => {
+    let allListings =  await Listing.find({});
+    res.render('listings/index.ejs', { allListings });
+});
+
+//new Route
+router.get("/new",async (req,res)=>{
+    
+     res.render("listings/new.ejs");
+});
+//Show Route
+router.get('/:id', wrapAsync(async (req, res, next) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    // If not a valid ObjectId, show 404 page
+    return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
+  }
+
+//Create Route
+router.post("/", validateListing, wrapAsync(async (req, res) => {
+  let newlisting = new Listing(req.body.listing);
+  await newlisting.save();
+  res.redirect("/listings");
+}));
+
+
+
+// Edit Route
+router.get("/:id/edit", async(req,res)=>{
+  let {id} = req.params;
+  let listing  = await Listing.findById(id);
+   res.render("listings/edit.ejs", { listing});
+});
+
+
+
+//Update Route
+router.put("/:id", validateListing, async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  // If image field is empty, keep the old image (handle both string and object)
+  if (!req.body.listing.image || req.body.listing.image.trim() === "") {
+    if (typeof listing.image === "object" && listing.image.url) {
+      req.body.listing.image = listing.image.url;
+    } else {
+      req.body.listing.image = listing.image;
+    }
+  }
+  await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+  res.redirect(`/${id}`);
+});
+
+
+//Delete Route
+router.delete("/:id/delete",async(req,res)=>{
+  let { id } = req.params;
+  await Listing.findByIdAndDelete(id);
+  res.redirect("/");
+});  const listing = await Listing.findById(id).populate('reviews');
+  if (!listing) {
+    return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
+  }
+  res.render('listings/show.ejs', { listing });
+}));
+
+//Create Route
+router.post("/", validateListing, wrapAsync(async (req, res) => {
+  let newlisting = new Listing(req.body.listing);
+  await newlisting.save();
+  res.redirect("/");
+}));
+
+
+
+// Edit Route
+router.get("/:id/edit", async(req,res)=>{
+  let {id} = req.params;
+  let listing  = await Listing.findById(id);
+   res.render("listings/edit.ejs", { listing});
+});
+
+
+
+//Update Route
+router.put("/:id", validateListing, async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  // If image field is empty, keep the old image (handle both string and object)
+  if (!req.body.listing.image || req.body.listing.image.trim() === "") {
+    if (typeof listing.image === "object" && listing.image.url) {
+      req.body.listing.image = listing.image.url;
+    } else {
+      req.body.listing.image = listing.image;
+    }
+  }
+  await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+  res.redirect(`/${id}`);
+});
+
+
+//Delete Route
+router.delete("/:id/delete",async(req,res)=>{
+  let { id } = req.params;
+  await Listing.findByIdAndDelete(id);
+  res.redirect("/");
+});
+
+
+
+
+module.exports = router;
