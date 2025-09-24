@@ -21,7 +21,6 @@ const validateListing = (req, res, next) => {
 
 
 
-
  //Index Route
 router.get('/', async (req, res) => {
     let allListings =  await Listing.find({});
@@ -34,7 +33,7 @@ router.get("/new",async (req,res)=>{
      res.render("listings/new.ejs");
 });
 //Show Route
-router.get('/listings/:id', wrapAsync(async (req, res, next) => {
+router.get('/:id', wrapAsync(async (req, res, next) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     // If not a valid ObjectId, show 404 page
@@ -83,7 +82,7 @@ router.put("/:id", validateListing, async (req, res) => {
 router.delete("/:id/delete",async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
-  res.redirect("/listings");
+  res.redirect("/");
 });
 
 
