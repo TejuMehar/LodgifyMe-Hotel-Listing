@@ -14,6 +14,9 @@ const { listingSchema, reviewSchema } = require('./schema.js'); // Assuming you 
 const  Review = require('./models/review.js'); // Assuming you have a Review model defined in models/review.js
 const listings = require('./routes/listing.js');
 const reviews = require('./routes/review.js')
+const session =require('express-session');
+const flash = require('connect-flash');
+const { read } = require('fs');
 
 
 const PORT = process.env.PORT || 3000;
@@ -34,6 +37,27 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 app.engine('ejs',ejsMate);
+
+
+
+app.use(session({
+  secret: "Tejas Mehar",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 7*24*60*60*1000,
+    maxAge : 7*24*60*60*1000,
+    httpOnly: true
+  }
+}));
+
+app.use(flash());
+
+app.use((req,res,next)=>{
+  res.locals.success = req.flash("success");
+  next();
+})
+
 
 const MONGO_URL = 'mongodb://localhost:27017/lodgifyMe';
 

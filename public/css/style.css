@@ -92,3 +92,16 @@ text-decoration: none;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
 }
+
+
+.btn-red {
+  background-color: #e4dfdf;
+  color: black;
+  border: 1px solid white;
+}
+
+a.btn-red:hover {
+  background-color: red;
+  color: white;
+  border-color: rgb(10, 10, 10);
+}
