@@ -50,7 +50,7 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
 }));
 
 //Create Route
-router.post("/", validateListing, wrapAsync(async (req, res) => {
+router.post("/", validateListing,isLoggedIn,wrapAsync(async (req, res) => {
   let newlisting = new Listing(req.body.listing);
   await newlisting.save();
   req.flash("success","New Listing Created !");
@@ -58,7 +58,7 @@ router.post("/", validateListing, wrapAsync(async (req, res) => {
 }));
 
 // Edit Route
-router.get("/:id/edit", async(req,res)=>{
+router.get("/:id/edit",isLoggedIn,async(req,res)=>{
   let {id} = req.params;
   let listing  = await Listing.findById(id);
    if (!listing) {
@@ -68,7 +68,7 @@ router.get("/:id/edit", async(req,res)=>{
    res.render("listings/edit.ejs", { listing});
 });
 //Update Route
-router.put("/:id", validateListing, async (req, res) => {
+router.put("/:id", validateListing,isLoggedIn,async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
 
@@ -80,7 +80,6 @@ router.put("/:id", validateListing, async (req, res) => {
       req.body.listing.image = listing.image;
     }
   }
-
   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
    req.flash("success","Listing Updated!");
   res.redirect(`/listings/${id}`);
@@ -88,7 +87,7 @@ router.put("/:id", validateListing, async (req, res) => {
 
 
 //Delete Route
-router.delete("/:id/delete",async(req,res)=>{
+router.delete("/:id/delete",isLoggedIn,async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
    req.flash("error","Listing Deleted!");

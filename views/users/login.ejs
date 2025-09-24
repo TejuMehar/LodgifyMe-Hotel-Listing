@@ -1,36 +1,96 @@
+
 <%- layout('/layouts/boilerplate') %>
 
-<div class="row mt-5">
-    <div class="col-6 offset-3">
-        <h2 class="mb-4 text-center">Login</h2>
-        <form action="/login" method="post">
-            <!-- Username Field -->
-            <div class="mb-3">
-                <label for="username" class="form-label fw-semibold">Username:</label>
-                <input type="text" id="username" name="username" class="form-control" required>
-                <div class="valid-feedback">
-                    Username looks good!
-                </div>
-            </div>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    background: url('https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') 
+                no-repeat center center/cover;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
 
-            <!-- Password Field -->
-            <div class="mb-3">
-                <label for="password" class="form-label fw-semibold">Password:</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-                <div class="valid-feedback">
-                    Password looks good!
-                </div>
-            </div>
+  .auth-card {
+    max-width: 550px;
+    width: 90%;
+    min-height: 500px;
+    background: rgba(255, 205, 255, 0.15); /* glass effect */
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    color: #fff;
+  }
 
-            <!-- Submit Button -->
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
+  .auth-card h2 {
+    color: #fff;
+    font-weight: bold;
+  }
 
-            <!-- Optional: Link to Signup -->
-            <p class="text-center mt-3">
-                Don't have an account? <a href="/signup">Sign Up</a>
-            </p>
-        </form>
-    </div>
+  .auth-card label {
+    font-weight: 400;
+    color: #fff;
+  }
+
+  .auth-card a {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .auth-card a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="card auth-card">
+    <!-- Header -->
+    <h2 class="text-center text-danger mb-2">Login to LodgifyMe</h2>
+
+    <!-- Form -->
+    <form action="/login" method="POST" novalidate>
+      <!-- Username -->
+      <div class="mb-4">
+        <label for="username" class="form-label">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          class="form-control form-control-lg" 
+          placeholder="Enter your username"
+          required>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control form-control-lg" 
+          placeholder="Enter your password"
+          required>
+      </div>
+
+      <!-- Remember Me -->
+      <div class="form-check mb-4">
+        <input type="checkbox" class="form-check-input" id="remember">
+        <label class="form-check-label" for="remember">Remember me</label>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-light w-100 fw-semibold py-2">Login</button>
+
+      <!-- Signup Link -->
+      <p class="text-center mt-4 mb-0">
+        Don’t have an account? 
+        <a href="/signup">Sign Up</a>
+      </p>
+    </form>
+  </div>
 </div>
