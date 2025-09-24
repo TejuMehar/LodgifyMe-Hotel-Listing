@@ -5,6 +5,7 @@ const ExpressError = require('../utils/ExpressError.js'); // Assuming you have a
 const { listingSchema, reviewSchema } = require('../schema.js'); // Assuming you have a schema defined in schema.js
 const Listing = require('../models/listing'); // Assuming you have a Listing model defined in models/listing.js
 const mongoose = require('mongoose');
+const { isLoggedIn } = require('../middleware.js');
 
 
 
@@ -28,13 +29,11 @@ router.get('/', async (req, res) => {
 });
 
 //new Route
-router.get("/new",async (req,res)=>{
-    if(!req.isAuthenticated()){
-      req.flash("error","You Must be login to create Listing");
-       return res.redirect("/login");
-    }
+router.get("/new",isLoggedIn,async (req,res)=>{
      res.render("listings/new.ejs");
 });
+
+
 //Show Route
 router.get('/:id', wrapAsync(async (req, res, next) => {
   const { id } = req.params;
