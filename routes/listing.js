@@ -29,7 +29,10 @@ router.get('/', async (req, res) => {
 
 //new Route
 router.get("/new",async (req,res)=>{
-    
+    if(!req.isAuthenticated()){
+      req.flash("error","You Must be login to create Listing");
+       return res.redirect("/login");
+    }
      res.render("listings/new.ejs");
 });
 //Show Route

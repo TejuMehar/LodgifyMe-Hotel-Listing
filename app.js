@@ -12,11 +12,16 @@ const wrapAsync = require('./utils/wrapAsync.js'); // Assuming you have a utilit
 const ExpressError = require('./utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
 const { listingSchema, reviewSchema } = require('./schema.js'); // Assuming you have a schema defined in schema.js
 const  Review = require('./models/review.js'); // Assuming you have a Review model defined in models/review.js
-const listings = require('./routes/listing.js');
-const reviews = require('./routes/review.js')
+const listingRouter = require('./routes/listing.js');
+const reviewRouter = require('./routes/review.js');
+const userRouter = require('./routes/user.js');
 const session =require('express-session');
 const flash = require('connect-flash');
 const { read } = require('fs');
+const passport = require('passport');
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
+
 
 
 const PORT = process.env.PORT || 3000;
@@ -60,6 +65,16 @@ app.use((req,res,next)=>{
 })
 
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+
 const MONGO_URL = 'mongodb://localhost:27017/lodgifyMe';
 
  
@@ -90,9 +105,20 @@ const validateReview = (req, res, next) => {
   next(); 
 }
 
+// app.get('/demoUser',async(req,res)=>{
+//   let fakeUser = new User({
+//     email: "student@gmail.com",
+//     username: "tejasmehar"
+//   });
 
-app.use('/listings',listings);
-app.use('/listings/:id/reviews', reviews);
+//     let  registerUser = await User.register(fakeUser,"helloworld");
+//     res.send(registerUser);
+// })
+
+
+app.use('/listings',listingRouter);
+app.use('/listings/:id/reviews', reviewRouter);
+app.use('/',userRouter);
 
 
 
