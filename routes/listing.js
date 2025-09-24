@@ -4,7 +4,7 @@ const wrapAsync = require('../utils/wrapAsync.js'); // Assuming you have a utili
 const ExpressError = require('../utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
 const { listingSchema, reviewSchema } = require('../schema.js'); // Assuming you have a schema defined in schema.js
 const Listing = require('../models/listing'); // Assuming you have a Listing model defined in models/listing.js
-
+const mongoose = require('mongoose');
 
 
 
@@ -50,7 +50,7 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
 router.post("/", validateListing, wrapAsync(async (req, res) => {
   let newlisting = new Listing(req.body.listing);
   await newlisting.save();
-  res.redirect("/");
+  res.redirect("/listings");
 }));
 
 // Edit Route
@@ -74,7 +74,7 @@ router.put("/:id", validateListing, async (req, res) => {
   }
 
   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-  res.redirect(`/${id}`);
+  res.redirect(`/listings/${id}`);
 });
 
 
@@ -82,7 +82,7 @@ router.put("/:id", validateListing, async (req, res) => {
 router.delete("/:id/delete",async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
-  res.redirect("/");
+  res.redirect("/listings");
 });
 
 
