@@ -41,7 +41,8 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
   }
   const listing = await Listing.findById(id).populate('reviews');
   if (!listing) {
-    return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
+    req.flash("error","Listings you Requested for Does Not Exist !")
+    res.redirect("/listings");
   }
   res.render('listings/show.ejs', { listing });
 }));
@@ -58,6 +59,10 @@ router.post("/", validateListing, wrapAsync(async (req, res) => {
 router.get("/:id/edit", async(req,res)=>{
   let {id} = req.params;
   let listing  = await Listing.findById(id);
+   if (!listing) {
+    req.flash("error","Listings you Requested for Does Not Exist !")
+    res.redirect("/listings");
+  }
    res.render("listings/edit.ejs", { listing});
 });
 //Update Route
@@ -84,6 +89,7 @@ router.put("/:id", validateListing, async (req, res) => {
 router.delete("/:id/delete",async(req,res)=>{
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
+   req.flash("error","Listing Deleted!");
   res.redirect("/listings");
 });
 
