@@ -91,7 +91,7 @@ const validateReview = (req, res, next) => {
 
 
 app.use('/listings',listings);
-app.use('/listings',reviews);
+app.use('/listings/:id/reviews', reviews);
 
 
 

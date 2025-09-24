@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true});
 const wrapAsync = require('../utils/wrapAsync.js'); // Assuming you have a utility function for async error handling
 const ExpressError = require('../utils/ExpressError.js'); // Assuming you have a custom error class for handling errors
 const { listingSchema, reviewSchema } = require('../schema.js'); // Assuming you have a schema defined in schema.js
@@ -20,7 +20,7 @@ const validateReview = (req, res, next) => {
 
 //Reviews Routes
 //post new review
-router.post('/listings/:id/reviews', async (req, res) => {
+router.post('/', async (req, res) => {
 
     const { id } = req.params;
    let listing = await Listing.findById(id);
@@ -33,7 +33,7 @@ router.post('/listings/:id/reviews', async (req, res) => {
 });
 
 // Delete review Route 
-router.delete('/listings/:id/reviews/:reviewId', wrapAsync(async (req, res) => {
+router.delete('/:reviewId', wrapAsync(async (req, res) => {
   const { id, reviewId } = req.params;
   await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
   await Review.findByIdAndDelete(reviewId);
