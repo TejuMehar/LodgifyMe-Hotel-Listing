@@ -41,7 +41,7 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
     // If not a valid ObjectId, show 404 page
     return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
   }
-  const listing = await Listing.findById(id).populate('reviews');
+  const listing = await Listing.findById(id).populate('reviews').populate('owner');
   if (!listing) {
     req.flash("error","Listings you Requested for Does Not Exist !")
     res.redirect("/listings");
@@ -52,6 +52,7 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
 //Create Route
 router.post("/", validateListing,isLoggedIn,wrapAsync(async (req, res) => {
   let newlisting = new Listing(req.body.listing);
+  newlisting.owner = req.user._id;
   await newlisting.save();
   req.flash("success","New Listing Created !");
   res.redirect("/listings");
@@ -67,6 +68,8 @@ router.get("/:id/edit",isLoggedIn,async(req,res)=>{
   }
    res.render("listings/edit.ejs", { listing});
 });
+
+
 //Update Route
 router.put("/:id", validateListing,isLoggedIn,async (req, res) => {
   const { id } = req.params;
