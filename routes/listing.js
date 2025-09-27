@@ -5,7 +5,7 @@ const ExpressError = require('../utils/ExpressError.js'); // Assuming you have a
 const { listingSchema, reviewSchema } = require('../schema.js'); // Assuming you have a schema defined in schema.js
 const Listing = require('../models/listing'); // Assuming you have a Listing model defined in models/listing.js
 const mongoose = require('mongoose');
-const { isLoggedIn } = require('../middleware.js');
+const { isLoggedIn,isOwner } = require('../middleware.js');
 
 
 
@@ -71,7 +71,7 @@ router.get("/:id/edit",isLoggedIn,async(req,res)=>{
 
 
 //Update Route
-router.put("/:id", validateListing,isLoggedIn,async (req, res) => {
+router.put("/:id", validateListing,isLoggedIn,isOwner,async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
 
