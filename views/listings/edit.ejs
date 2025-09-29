@@ -5,7 +5,7 @@
     <div class="col-md-6">
       <div class="card shadow-lg rounded-4">
         <div class="card-body p-4">
-          <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+          <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
             <div class="mb-3">
               <label for="title" class="form-label fw-semibold">Title:</label>
               <input type="text" id="title" name="listing[title]" class="form-control" value="<%= listing.title %>" required>
@@ -15,8 +15,8 @@
               <textarea id="description" name="listing[description]" class="form-control" required><%= listing.description %></textarea>
             </div>
             <div class="mb-3">
-              <label for="image" class="form-label fw-semibold">Image URL:</label>
-             <input type="url" id="image" name="listing[image]" class="form-control" value="<%= listing.image.url ? listing.image.url : listing.image %>">
+              <label for="image" class="form-label fw-semibold">Upload New Image:</label>
+             <input type="file" id="image" name="image" class="form-control">
             </div>
             <div class="row">
               <div class="mb-3 col-4">

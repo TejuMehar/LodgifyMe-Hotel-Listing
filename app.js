@@ -46,7 +46,7 @@ app.engine('ejs',ejsMate);
 
 
 app.use(session({
-  secret: "Tejas Mehar",
+  secret: process.env.SESSION_SECRET || "dev_secret",
   resave: false,
   saveUninitialized: true,
   cookie: {

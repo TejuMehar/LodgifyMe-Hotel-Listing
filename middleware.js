@@ -19,24 +19,20 @@ module.exports.saveRedirectUrl = (req,res,next) =>{
 next();
 }
 
-module.exports.isOwner = async(req,res,owner) =>{
-    const { id } = req.params;
+module.exports.isOwner = async (req, res, next) => {
+  const { id } = req.params;
   const listing = await Listing.findById(id);
+  if (!listing) {
+    req.flash("error", "Listings you Requested for Does Not Exist !");
+    return res.redirect("/listings");
+  }
 
-  // If image field is empty, keep the old image (handle both string and object)
-  if (!req.body.listing.image || req.body.listing.image.trim() === "") {
-    if (typeof listing.image === "object" && listing.image.url) {
-      req.body.listing.image = listing.image.url;
-    } else {
-      req.body.listing.image = listing.image;
-    }
+  const currentUserId = (res.locals.currUser && res.locals.currUser._id) || (req.user && req.user._id);
+  if (!currentUserId || !listing.owner || !listing.owner.equals(currentUserId)) {
+    req.flash("error", "You Don't have Permission To Edit!");
+    return res.redirect(`/listings/${id}`);
   }
-  if(!listing.owner._id.equals(res.locals.currUser._id)){
-    req.flash("error","You Don't have Permission To Edit!");
-     return res.redirect(`/listings/${id}`);
-  }
-  await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-   req.flash("success","Listing Updated!");
-  res.redirect(`/listings/${id}`);
+
+  next();
 }
 
