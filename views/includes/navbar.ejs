@@ -1,4 +1,41 @@
+<style>
+  .btn-search {
+    background-color: #ff385c;
+    color: white;
+    border-radius: 25px;
+    padding: 5px 15px;
+  }
+  .btn-search i {
+    display: inline;
+  }
+  .in-search {
+    border-radius: 25px;
+    width: 350px;
+    padding: 0 1rem 0 1rem;
+  }
+  .navbar-collapse {
+  background-color: #fff !important;  /* white background */
+  padding: 1rem;                      /* spacing inside */
+  border-radius: 0 0 8px 8px;         /* smooth bottom edges */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* subtle shadow */
+}
+
+@media (max-width: 768px) {
+  .in-search {
+    width: 250px;      /* smaller on tablets */
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .in-search {
+    width: 100%;       /* take full width on small screens */
+  }
+}
+</style>
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom fixed-top">
+
   <div class="container-fluid">
     <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i> &nbsp;&nbsp;LodgifyMe</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -6,18 +43,26 @@
     </button>
     <div class="collapse navbar-collapse bg-body-light" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto bg-body-light p-2">
-        <a class="nav-link" href="/listings">Home</a>
+        <!-- <a class="nav-link" href="/listings">Home</a> -->
         <a class="nav-link" href="/listings">All Listings</a>
-        <a class="nav-link" href="/listings/new">Add New Listing</a>
+      </div>
+        
+      <div class="navbar-nav ">
+        <form class="d-flex" role="search">
+             <input class="form-control me-3 in-search" type="search" placeholder="Search Destination"/>
+             <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>&nbsp;Search</button>
+        </form>
       </div>
     
-       <div class="navbar-nav ms-auto">
-    <% if(currUser) { %>
-        <a class="nav-link" href="/logout">LogOut</a>
-    <% } else { %>
-        <a class="nav-link" href="/signup">SignUp</a>
-        <a class="nav-link" href="/login">LogIn</a>
-    <% } %>
+
+      <div class="navbar-nav ms-auto">
+         <a class="nav-link" href="/listings/new">Add New Home</a>
+        <% if(currUser) { %>
+        <a class="nav-link" href="/logout"><b>LogOut</b></a>
+        <% } else { %>
+        <a class="nav-link" href="/signup"><b>SignUp</b></a>
+        <a class="nav-link" href="/login"><b> LogIn</b></a>
+       <% } %>
 </div>
     </div>
   </div>

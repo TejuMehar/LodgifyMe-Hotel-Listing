@@ -1,6 +1,163 @@
 <%- layout('/layouts/boilerplate') %>
 <body class="mt-5">
-     
+  <style>
+  /* Container */
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+
+  /* Filter items */
+  .filter {
+    text-align: center;
+    flex: 0 0 auto;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    margin-right: 2rem;
+  }
+
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+    transform: scale(1.05);
+  }
+
+  .filter i {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .filter p {
+    font-size: 0.85rem;
+    margin: 0;
+    word-break: break-word;
+  }
+
+  /* Tax toggle aligned right (desktop) */
+  .tax-toggle {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+  .tax-toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;       /* add space inside */
+  border: 1px solid #ccc;     /* light gray border */
+  border-radius: 8px;         /* rounded corners */
+  background-color: #f9f9f9;  /* subtle background */
+}
+
+  .tax-toggle label {
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+  }
+
+  /* Tablet */
+  @media (max-width: 992px) {
+    #filters {
+      justify-content: center;
+    }
+    .tax-toggle {
+      margin-left: 0;
+      margin-top: 1rem;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* Mobile → 3 per row, equal spacing */
+  @media (max-width: 768px) {
+    #filters {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      text-align: center;
+      justify-items: center; /* centers content in each grid cell */
+    }
+
+    .filter {
+      width: 100%;
+    }
+
+    .tax-toggle {
+      grid-column: span 3; /* tax toggle takes full width */
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  }
+
+  /* Smallest screens */
+  @media (max-width: 480px) {
+    .filter i {
+      font-size: 1.2rem;
+    }
+    .filter p {
+      font-size: 0.75rem;
+    }
+    .tax-toggle label {
+      font-size: 0.8rem;
+    }
+  }
+</style>
+
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-fire"></i></div>
+    <p>Trending</p>
+  </div>
+  <div class="filter">
+    <div><i class="fa-solid fa-bed"></i></div>
+    <p>Rooms</p>
+  </div>
+  <div class="filter">
+    <div><i class="fa-solid fa-mountain-city"></i></div>
+    <p>Iconic Cities</p>
+  </div>
+  <div class="filter">
+    <div><i class="fa-solid fa-mountain-sun"></i></div>
+    <p>Mountains</p>
+  </div>
+  <div class="filter">
+    <div><i class="fa-brands fa-fort-awesome"></i></div>
+    <p>Castles</p>
+  </div>
+  <div class="filter">
+    <div><i class="fa-solid fa-person-swimming"></i></div>
+    <p>Amazing Pools</p>
+  </div>
+  <div class="filter">
+    <div><i class="fa-solid fa-tent-arrow-down-to-line"></i></div>
+    <p>Camping</p>
+  </div>
+  <div class="filter">
+    <div><i class="fa-solid fa-tractor"></i></div>
+    <p>Farms</p>
+  </div>
+  <div class="filter">
+    <div><i class="fa-solid fa-snowflake"></i></div>
+    <p>Arctic</p>
+  </div>
+  
+
+  <!-- Tax toggle -->
+  <div class="tax-toggle">
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+      <label class="form-check-label" for="switchCheckDefault">
+        Display total after Taxes
+      </label>
+    </div>
+  </div>
+</div>
+
+
     <div class="row mt-5">
       <% for(let listing of allListings) { %>
         <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4  d-flex">
@@ -11,7 +168,7 @@
            
             <div class="card-body flex-grow-1">
               <p class="card-text mb-1"><%= listing.title %></p>
-              <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %>/Night</p>
+              <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %>/Night <i class="tax-info">&nbsp; +18%GST</i></p>
               <p class="card-text"><i class="fas fa-location-dot"></i> &nbsp; <%= listing.location %></p>
             </div>
                <button class="btn btn-light w-100" style="margin-bottom: 10px;">
@@ -26,3 +183,15 @@
     </div>
     
 </body>
+
+
+<script>
+  let taxSwitch= document.getElementById('switchCheckDefault');
+  taxSwitch.addEventListener('click',()=>{
+    let taxInfo = document.querySelectorAll('.tax-info');
+    for(info of taxInfo) {
+      info.style.display = taxSwitch.checked ? 'inline' : 'none';
+    }
+  });
+
+</script>
