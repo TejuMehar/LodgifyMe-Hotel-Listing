@@ -41,7 +41,9 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
     // If not a valid ObjectId, show 404 page
     return res.status(404).render('listings/Error.ejs', { status: 404, message: 'Page Not Found' });
   }
-  const listing = await Listing.findById(id).populate('reviews').populate('owner');
+  const listing = await Listing.findById(id).populate( {path:'reviews',populate:{
+     path: "author"
+  }}).populate('owner');
   if (!listing) {
     req.flash("error","Listings you Requested for Does Not Exist !")
     res.redirect("/listings");

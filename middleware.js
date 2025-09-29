@@ -39,3 +39,4 @@ module.exports.isOwner = async(req,res,owner) =>{
    req.flash("success","Listing Updated!");
   res.redirect(`/listings/${id}`);
 }
+

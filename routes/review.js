@@ -5,6 +5,7 @@ const ExpressError = require('../utils/ExpressError.js'); // Assuming you have a
 const { listingSchema, reviewSchema } = require('../schema.js'); // Assuming you have a schema defined in schema.js
 const  Review = require('../models/review.js'); // Assuming you have a Review model defined in models/review.js
 const Listing = require('../models/listing'); // Assuming you have a Listing model defined in models/listing.js
+const { isLoggedIn } = require('../middleware.js');
 
 
 
@@ -20,11 +21,13 @@ const validateReview = (req, res, next) => {
 
 //Reviews Routes
 //post new review
-router.post('/', async (req, res) => {
+router.post('/',isLoggedIn,validateReview,async(req, res) => {
 
     const { id } = req.params;
    let listing = await Listing.findById(id);
     let newReview = new Review(req.body.review);
+    newReview.author = req.user._id;
+    // console.log(newReview);
     listing.reviews.push(newReview);
     await newReview.save();
     await listing.save();
