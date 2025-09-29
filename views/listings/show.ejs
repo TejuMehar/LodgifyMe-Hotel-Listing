@@ -7,7 +7,7 @@
       <div class="col-md-10 col-lg-8">
         <div class="card shadow-lg border-0 rounded-4 overflow-hidden animate__animated animate__fadeInDown">
           <div class="position-relative">
-            <img src="<%= listing.image.url ? listing.image.url : listing.image %>" class="card-img-top show-img rounded-top-4" alt="listing_image" style="object-fit:cover; height:320px; filter: brightness(0.95);">
+            <img src="<%= listing.image.url %>" class="card-img-top show-img rounded-top-4" alt="listing_image" style="object-fit:cover; height:320px; filter: brightness(0.95);">
             <span class="badge position-absolute top-0 end-0 m-3 px-3 py-2 fs-6 shadow-sm" style="background: linear-gradient(90deg, #ff8a00 0%, #e52e71 100%); color: #fff;">
               <i class="bi bi-currency-rupee"></i><%= listing.price.toLocaleString("en-IN") %>/Night
             </span>

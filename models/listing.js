@@ -11,11 +11,8 @@ const listingSchema = new Schema({
       type: String, 
       required: true },
     image: {
-        // url: String // Only 'url' since your data only has 'url'
-        url: {
-        type: String,
-        default: "https://images.unsplash.com/photo-1501183638710-841dd1904471?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8aG9tZXxlbnwwfHwwfHx8MA%3D%3D"
-       }
+        url: String,
+        filename: String
     },
     price: { 
       type: Number,
