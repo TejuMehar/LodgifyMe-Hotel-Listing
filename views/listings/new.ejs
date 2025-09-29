@@ -5,7 +5,7 @@
     <div class="col-md-6">
       <div class="card shadow-lg rounded-4">
         <div class="card-body p-4">
-          <form action="/listings" method="POST" novalidate class="needs-validation">
+          <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
             <div class="mb-3">
               <label for="title" class="form-label fw-semibold">Title:</label>
               <input type="text" id="title" name="listing[title]" class="form-control" required>
@@ -20,10 +20,9 @@
                 Please enter a description.
               </div>
             </div>
-            <div class="mb-3">
-              <label for="image" class="form-label fw-semibold">Image URL:</label>
-              <input type="url" id="image" name="listing[image]" class="form-control">
-        
+             <div class="mb-3">
+              <label for="image" class="form-label fw-semibold"> Upload Listing Image:</label>
+              <input type="file" id="image" name="listing[image]" class="form-control">
             </div>
             <div class="row">
               <div class="mb-3 col-4">

@@ -5,59 +5,22 @@ const User = require('../models/user.js');
 const wrapAsync = require('../utils/wrapAsync.js');
 const passport = require('passport');
 const { saveRedirectUrl } = require('../middleware.js');
+const userControllers = require('../controllers/userControllers.js');
+const user = require('../models/user.js');
 
+router.route('/signup').get(userControllers.renderRegister)
+.post(wrapAsync(userControllers.register));
 
-router.get("/signup",(req,res)=>{
-    res.render("users/signup.ejs");
-});
-
-router.post("/signup", wrapAsync(async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-        const newUser = new User({ email, username });
-        // Wait for registration to complete
-        await User.register(newUser, password);
-         req.login(newUser,(err)=>{
-            if(err){
-                next(err);
-            }else{
-                 req.flash("success", "User Registered Successfully!");
-                return res.redirect("/listings");  // return to prevent further execution
-            }
-         })
-    } catch (e) {
-        req.flash("error", e.message);
-        return res.redirect("/signup"); // redirect back to signup on error
-    }
-}));
-
-router.get("/login",(req,res)=>{
-    res.render("users/login.ejs");
-});
-
-
-router.post(
-  "/login",
+router.route('/login').get(userControllers.renderLogin)
+.post(
   saveRedirectUrl,
   passport.authenticate("local", {
     failureRedirect: "/login",
     failureFlash: true,
-  }),
-  (req, res) => {
-    req.flash("success", "Welcome to LodgiFyMe!");
-    const redirectUrl = res.locals.redirectUrl || "/listings"; // fallback
-    delete req.session.redirectUrl; // cleanup
-    res.redirect(redirectUrl);
-  }
+  }),userControllers.login
 );
 
 
-router.get("/logout", (req, res, next) => {
-    req.logout((err) => {
-        if(err) return next(err);
-        req.flash("success", "You have successfully logged out!");
-        res.redirect('/listings');
-    });
-});
+router.get("/logout",userControllers.logout);
 
 module.exports =router;
