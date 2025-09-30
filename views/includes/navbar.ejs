@@ -12,27 +12,47 @@
     border-radius: 25px;
     width: 350px;
     padding: 0 1rem 0 1rem;
+    max-width: 100%; /* prevent overflow */
   }
-  .navbar-collapse {
-  background-color: #fff !important;  /* white background */
-  padding: 1rem;                      /* spacing inside */
-  border-radius: 0 0 8px 8px;         /* smooth bottom edges */
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* subtle shadow */
+
+  /* Keep same color on desktop */
+  .navbar {
+    background-color: #f8f9fa; /* same as bg-body-light */
+  }
+
+  /* Mobile navbar menu (collapsed) */
+  @media (max-width: 768px) {
+    .navbar-collapse {
+      background-color: #fff !important;  /* pure white on mobile */
+      padding: 1rem;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+  }
+
+  .in-search {
+  border-radius: 25px;
+  width: 350px;              /* default (desktop) */
+  padding: 0 1rem;
 }
 
 @media (max-width: 768px) {
   .in-search {
-    width: 250px;      /* smaller on tablets */
+    width: 100%;             /* full width on mobile */
+    margin-bottom: 0.5rem;   /* add spacing for stacked layout */
   }
-}
 
-/* Mobile */
-@media (max-width: 576px) {
-  .in-search {
-    width: 100%;       /* take full width on small screens */
+  .navbar-nav form {
+    flex-direction: column;  /* stack input & button */
+    align-items: stretch;
+  }
+
+  .btn-search {
+    width: 100%;             /* full width button */
   }
 }
 </style>
+
 
 <nav class="navbar navbar-expand-md bg-body-light border-bottom fixed-top">
 

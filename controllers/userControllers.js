@@ -1,4 +1,6 @@
 const User = require('../models/user'); // Assuming you have a User model defined in models/user.js
+const sendWelcomeMail = require('../utils/Nodemailer.js');
+
 
 module.exports.renderRegister = (req,res)=>{
     res.render("users/signup.ejs");
@@ -11,10 +13,12 @@ module.exports.register = async (req, res) => {
         const newUser = new User({ email, username });
         // Wait for registration to complete
         await User.register(newUser, password);
-         req.login(newUser,(err)=>{
+
+         req.login(newUser,async(err)=>{
             if(err){
                 next(err);
             }else{
+               await sendWelcomeMail(email, username)
                  req.flash("success", "User Registered Successfully!");
                 return res.redirect("/listings");  // return to prevent further execution
             }

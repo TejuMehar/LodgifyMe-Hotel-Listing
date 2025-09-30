@@ -16,12 +16,14 @@ const listingRouter = require('./routes/listing.js');
 const reviewRouter = require('./routes/review.js');
 const userRouter = require('./routes/user.js');
 const session =require('express-session');
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const { read } = require('fs');
 const passport = require('passport');
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-
+const nodemailer = require('nodemailer');
+const transporter = require('./utils/Nodemailer.js');
 
 
 const PORT = process.env.PORT || 3000;
@@ -44,8 +46,20 @@ app.use(methodOverride('_method'));
 app.engine('ejs',ejsMate);
 
 
+const store = MongoStore.create({
+  mongoUrl: process.env.Mongo_URL,
+  crypto: {
+     secret: process.env.SESSION_SECRET
+  },
+  touchAfter: 24 * 3600 // time period in seconds
+}); 
+
+store.on("error",function(e){
+  console.log("SESSION STORE ERROR",e);
+});
 
 app.use(session({
+  store: store,
   secret: process.env.SESSION_SECRET || "dev_secret",
   resave: false,
   saveUninitialized: true,
@@ -55,6 +69,7 @@ app.use(session({
     httpOnly: true
   }
 }));
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -76,7 +91,7 @@ app.use((req,res,next)=>{
 
 
 
-const MONGO_URL = 'mongodb://localhost:27017/lodgifyMe';
+const MONGO_URL = process.env.Mongo_URL;;
 
  
 async function main() {

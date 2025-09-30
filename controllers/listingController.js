@@ -56,8 +56,8 @@ module.exports.editListing = async (req, res) => {
 }
 
 module.exports.updateListing = async (req, res) => {
-  console.log("BODY:", req.body);  
-  console.log("FILE:", req.file);
+  // console.log("BODY:", req.body);  
+  // console.log("FILE:", req.file);
 
   const { id } = req.params;
   const listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
