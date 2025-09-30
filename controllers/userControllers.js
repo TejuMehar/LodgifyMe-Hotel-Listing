@@ -1,5 +1,4 @@
 const User = require('../models/user'); // Assuming you have a User model defined in models/user.js
-const { sendWelcomeMail } = require('../utils/nodemailer.js');
 
 
 module.exports.renderRegister = (req,res)=>{
@@ -14,11 +13,10 @@ module.exports.register = async (req, res) => {
         // Wait for registration to complete
         await User.register(newUser, password);
 
-         req.login(newUser,async(err)=>{
+         req.login(newUser,(err)=>{
             if(err){
                 next(err);
             }else{
-               await sendWelcomeMail(email, username)
                  req.flash("success", "User Registered Successfully!");
                 return res.redirect("/listings");  // return to prevent further execution
             }
