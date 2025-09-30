@@ -22,11 +22,10 @@ const { read } = require('fs');
 const passport = require('passport');
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-const nodemailer = require('nodemailer');
-const transporter = require('./utils/Nodemailer.js');
+const transporter = require('./utils/nodemailer.js');
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // Set EJS as the template/view engine for rendering dynamic HTML
 app.set('view engine', 'ejs');

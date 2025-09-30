@@ -1,5 +1,5 @@
 const User = require('../models/user'); // Assuming you have a User model defined in models/user.js
-const sendWelcomeMail = require('../utils/Nodemailer.js');
+const sendWelcomeMail = require('../utils/nodemailer.js');
 
 
 module.exports.renderRegister = (req,res)=>{
