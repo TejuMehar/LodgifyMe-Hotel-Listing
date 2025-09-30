@@ -22,7 +22,6 @@ const { read } = require('fs');
 const passport = require('passport');
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-const transporter = require('./utils/nodemailer.js');
 
 
 const PORT = 3000;
